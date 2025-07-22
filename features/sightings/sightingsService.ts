@@ -1,12 +1,17 @@
+import { API_CONFIG } from "@/api/config";
 import { Sighting } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const apiClient = axios.create({
+	baseURL: API_CONFIG.baseURL,
+	timeout: API_CONFIG.timeout,
+});
+
 const CACHED_SIGHTINGS_KEY = "cachedSightings";
 
 export const fetchSightings = async (): Promise<Sighting[]> => {
-	const response = await axios.get<Sighting[]>(API_URL as string);
+	const response = await apiClient.get<Sighting[]>("/ufoSightings");
 	return response.data;
 };
 
